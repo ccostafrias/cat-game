@@ -23,8 +23,7 @@
     --fw-regular: 400;
     --fw-bold: 700;
 
-    --primary-color: #8FBC8F;
-    --secundary-color: #2E8B57;
+    --primary-color: #c05555;
 }
 
 body,
@@ -78,9 +77,50 @@ main, #root {
     width: 100%;
 }
 
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    /* transform: rotate(90deg); */
 }
+
+.hex-line {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.hex:before {
+    content: " ";
+    width: 0; height: 0;
+    border-bottom: 30px solid var(--primary-color);
+    border-left: 52px solid transparent;
+    border-right: 52px solid transparent;
+    position: absolute;
+    top: -30px;
+}
+.hex {
+    margin-top: 30px;
+    width: 104px;
+    height: 60px;
+    background-color: var(--primary-color);
+    position: relative;
+}
+
+.hex:after {
+    content: "";
+    width: 0;
+    position: absolute;
+    bottom: -30px;
+    border-top: 30px solid var(--primary-color);
+    border-left: 52px solid transparent;
+    border-right: 52px solid transparent;
+}
+
