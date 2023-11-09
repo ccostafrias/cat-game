@@ -2,41 +2,32 @@ import React, { useState, useEffect } from "react"
 
 
 export default function App() {
-    const lines = 5
-    const hexCount = 5
-    const end = 0
+    const hexCount = 7
 
-    const hexLines = Array.from(Array(lines))
-    const hexElement = (hc) => {
+    const [hex, setHex] = useState(Array.from(Array(hexCount**2)))
+
+    const hexElements = Array.from(Array(hexCount**2)).map((hl, i) => {
+        const column = i % 7
+        const row = (i - column) / 7
+        const style = row % 2 ? {
+            left: 'calc(54px * var(--scale))'
+        } : null
         return (
-            Array.from(Array(hc)).map(hex => (
-                <div className="hex"></div>
-            ))
-        )
-    }
-
-    const hexElements = hexLines.map((hl, i) => {
-        return (
-            <div className="hex-line">
-                {hexElement(hexCount + (i % 2))}
-            </div>
+            <div 
+                className="hex"
+                data-column={column} 
+                data-row={row}
+                style={style}
+            />
         )
 
-    })
-
-    const hexEnd = Array.from(Array(end)).map((he, i) => {
-        return (
-            <div className="hex-line">
-                {hexElement(hexCount - (end - i))}
-            </div>
-        )
     })
 
     return (
-        <main>
-            {hexEnd}
+        <main style={{
+            gridTemplateColumns: `repeat(${hexCount}, 1fr)`,
+        }}>
             {hexElements}
-            {[...hexEnd].reverse()}
         </main>
        
     )

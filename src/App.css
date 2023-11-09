@@ -23,6 +23,8 @@
     --fw-regular: 400;
     --fw-bold: 700;
 
+    --scale: .7;
+
     --primary-color: #c05555;
 }
 
@@ -73,10 +75,6 @@ body {
     background-color: #edfeff;
 }
 
-main, #root {
-    width: 100%;
-}
-
 #root {
     display: flex;
     justify-content: center;
@@ -84,32 +82,27 @@ main, #root {
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* transform: rotate(90deg); */
-}
-
-.hex-line {
-    display: flex;
+    position: relative;
+    left: calc(-27px * var(--scale));
+    display: grid;
     gap: 5px;
-    margin-bottom: 5px;
+    /* transform: rotate(90deg); */
 }
 
 .hex:before {
     content: " ";
     width: 0; height: 0;
-    border-bottom: 30px solid var(--primary-color);
-    border-left: 52px solid transparent;
-    border-right: 52px solid transparent;
+    border-bottom: calc(30px * var(--scale)) solid var(--primary-color);
+    border-left: calc(52px * var(--scale)) solid transparent;
+    border-right: calc(52px * var(--scale)) solid transparent;
     position: absolute;
-    top: -30px;
+    top: calc(-30px * var(--scale));
 }
+
 .hex {
-    margin-top: 30px;
-    width: 104px;
-    height: 60px;
+    margin-top: calc(30px * var(--scale));
+    width: calc(104px * var(--scale));
+    height: calc(60px * var(--scale));
     background-color: var(--primary-color);
     position: relative;
 }
@@ -118,9 +111,9 @@ main {
     content: "";
     width: 0;
     position: absolute;
-    bottom: -30px;
-    border-top: 30px solid var(--primary-color);
-    border-left: 52px solid transparent;
-    border-right: 52px solid transparent;
+    bottom: calc(-30px * var(--scale));
+    border-top: calc(30px * var(--scale)) solid var(--primary-color);
+    border-left: calc(52px * var(--scale)) solid transparent;
+    border-right: calc(52px * var(--scale)) solid transparent;
 }
 
