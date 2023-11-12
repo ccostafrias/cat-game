@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/cat-game/static/css/main.9b2820e2.css",
+    "main.js": "/cat-game/static/js/main.b309fcef.js",
+    "index.html": "/cat-game/index.html",
+    "main.9b2820e2.css.map": "/cat-game/static/css/main.9b2820e2.css.map",
+    "main.b309fcef.js.map": "/cat-game/static/js/main.b309fcef.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9b2820e2.css",
+    "static/js/main.b309fcef.js"
+  ]
+}
