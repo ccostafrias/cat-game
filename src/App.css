@@ -23,9 +23,11 @@
     --fw-regular: 400;
     --fw-bold: 700;
 
-    --scale: .7;
+    --scale: 1;
 
     --primary-color: #c05555;
+    --secondary-color: #76b676;
+    --hex-color: #fff;
 }
 
 body,
@@ -81,39 +83,60 @@ body {
     align-items: center;
 }
 
-main {
+.table {
     position: relative;
-    left: calc(-27px * var(--scale));
+    left: calc(-13px * var(--scale));
     display: grid;
-    gap: 5px;
+    gap: 4px;
+
     /* transform: rotate(90deg); */
 }
 
-.hex:before {
-    content: " ";
-    width: 0; height: 0;
-    border-bottom: calc(30px * var(--scale)) solid var(--primary-color);
-    border-left: calc(52px * var(--scale)) solid transparent;
-    border-right: calc(52px * var(--scale)) solid transparent;
-    position: absolute;
-    top: calc(-30px * var(--scale));
-}
-
 .hex {
-    margin-top: calc(30px * var(--scale));
-    width: calc(104px * var(--scale));
-    height: calc(60px * var(--scale));
-    background-color: var(--primary-color);
     position: relative;
 }
 
-.hex:after {
-    content: "";
-    width: 0;
-    position: absolute;
-    bottom: calc(-30px * var(--scale));
-    border-top: calc(30px * var(--scale)) solid var(--primary-color);
-    border-left: calc(52px * var(--scale)) solid transparent;
-    border-right: calc(52px * var(--scale)) solid transparent;
+.hex-top {
+    width: 0; height: 0;
+    border-bottom: calc(15px * var(--scale)) solid var(--primary-color);
+    border-left: calc(26px * var(--scale)) solid transparent;
+    border-right: calc(26px * var(--scale)) solid transparent;
+    position: relative;
 }
 
+.hex-middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: calc(52px * var(--scale));
+    height: calc(30px * var(--scale));
+    background-color: var(--primary-color);
+    position: relative;
+    color: white;
+    user-select: none;
+    cursor: pointer;
+    font-size: var(--fs-200);
+}
+
+.hex-bottom {
+    width: 0;
+    position: absolute;
+    bottom: calc(-15px * var(--scale));
+    border-top: calc(15px * var(--scale)) solid var(--primary-color);
+    border-left: calc(26px * var(--scale)) solid transparent;
+    border-right: calc(26px * var(--scale)) solid transparent;
+}
+
+.main-game {
+    position: relative;
+}
+
+.goat {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    transition: all .2s ease;
+}
