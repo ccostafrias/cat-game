@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/cat-game/static/css/main.9b2820e2.css",
-    "main.js": "/cat-game/static/js/main.b309fcef.js",
+    "main.css": "/cat-game/static/css/main.10504136.css",
+    "main.js": "/cat-game/static/js/main.a50aa90b.js",
+    "static/media/goat.png": "/cat-game/static/media/goat.6ac003d09f0ea00b347b.png",
     "index.html": "/cat-game/index.html",
-    "main.9b2820e2.css.map": "/cat-game/static/css/main.9b2820e2.css.map",
-    "main.b309fcef.js.map": "/cat-game/static/js/main.b309fcef.js.map"
+    "main.10504136.css.map": "/cat-game/static/css/main.10504136.css.map",
+    "main.a50aa90b.js.map": "/cat-game/static/js/main.a50aa90b.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b2820e2.css",
-    "static/js/main.b309fcef.js"
+    "static/css/main.10504136.css",
+    "static/js/main.a50aa90b.js"
   ]
 }
