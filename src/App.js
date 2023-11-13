@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react"
 
+// import goat from "./images/goat.png"
 
 export default function App() {
-    const hexCount = 9
+    const hexCount = 11
 
     const [hex, setHex] = useState(
         Array.from(Array(hexCount**2)).map((_, i) => {
@@ -25,9 +26,12 @@ export default function App() {
         left: 0,
         gt: 0,
         gl: 0,
+        dir: 0,
+        transition: 'all .2s ease',
     })
 
     const [pass, setPass] = useState(0)
+    const [isWin, setIsWin] = useState(false)
     
     const hexToDecimal = (hex) => parseInt(hex, 16)
     const decToHex = (dec) => Math.abs(dec).toString(16)
@@ -45,16 +49,36 @@ export default function App() {
         }
     }, [pass])
 
-    const hexElements = hex.map((h, i) => {
+    useEffect(() => {
+        const {dir, cellNum, x, y} = player
+        if (cellNum === 0 && !isWin) {
+            setTimeout(() => {
+                const cExtreme = Math.round(((x / (hexCount-1)) - .5)*1.1)
+                const rExtreme = Math.round(((y / (hexCount-1)) - .5)*1.1)
+                const distance = 150
+                setPlayer(prevPlayer => {
+                    return {
+                        ...prevPlayer,
+                        top: prevPlayer.top + rExtreme * distance,
+                        left: prevPlayer.left + cExtreme * distance,
+                        transition: 'all 2s ease',
+                    }
+                })
+                setIsWin(true)
+            }, 200)
+        }
+        
+    }, [player])
+
+    const hexElements = hex.map((h) => {
         const {c, r, id, cellNum, active} = h
         const style =  {
             left: r % 2 ? 'calc(28px * var(--scale))' : null,
-            opacity: active ? '1' : '.75',
         }
         const maxCellNum = Math.max(...hex.map(h => h.cellNum))
         const percentage = (100*cellNum)/maxCellNum
-        const color = getBetweenColor([red, green], percentage/100)
-        // const color = green
+        // const color = getBetweenColor([red, green], percentage/100)
+        const color = active ? green : red
         const isCentral = Math.floor(hexCount/2) === c && Math.floor(hexCount/2) === r
 
         return (
@@ -70,6 +94,12 @@ export default function App() {
                     deactivateHex(h.id)
                     setPass(prevPass => prevPass + 1)
                 }}
+                onKeyUp={(e) => {
+                    if (e.code !== 'Enter' && e.code !== 'Space') return
+                    deactivateHex(h.id)
+                    setPass(prevPass => prevPass + 1)
+                }}
+                tabIndex='1'
             >
                 <div className="hex-top" style={{
                     borderBottom: `calc(15px * var(--scale)) solid ${color}`
@@ -77,14 +107,17 @@ export default function App() {
                 <div className="hex-middle" style={{
                     backgroundColor: `${color}`
                 }}>
-                    <span>{cellNum}</span>
-                    <span>{id}</span>
+                    {/* <span>{cellNum}</span>
+                    <span>{id}</span> */}
                     {isCentral && (
-                        <div className="goat" style={{
+                        <div className="goat-wrapper" style={{
+                            transform: `translate(-50%, -75%) scaleX(${player.dir % 2 ? '' : '-'}1)`,
                             top: `calc(50% + (${player.top}px * var(--scale)) + (${player.gt} * 4px))`,
                             left: `calc(50% + (${player.left}px * var(--scale)) + (${player.gl} * 4px))`,
+                            transition: player.transition,
                         }}>
-                            <h1>CABRA</h1>
+                            <div className="shadow"></div>
+                            <div className={`goat ${isWin ? 'walking' : ''}`}></div>
                         </div>
                     )}
                 </div>
@@ -105,36 +138,29 @@ export default function App() {
         setPlayer(prevPlayer => {
             return (
                 {
+                    ...prevPlayer,
                     x: c,
                     y: r,
                     top: prevPlayer.top + top,
                     left: prevPlayer.left + left,
                     gt: prevPlayer.gt + gt,
                     gl: prevPlayer.gl + gl,
+                    dir: minHex.dir,
+                    cellNum: minHex.cellNum,
                 }
             )
         })
     }
 
     function walkGoat(d) {
-        let top, left, gt, gl
-        if (d === 0 || d === 1) {
-            top = -45
-            left = d === 0 ? -26 : 26
-            gt = -1
-            gl = d === 0 ? -.5 : .5
-        }
-        else if (d === 4 || d === 5) {
-            top = 45
-            left = d === 4 ? -26 : 26
-            gt = 1
-            gl = d === 4 ? -.5 : .5
-        } else if (d === 2 || d === 3) {
-            top = 0
-            left = d === 2 ? -52 : 52
-            gt = 0
-            gl = d === 2 ? -1 : 1
-        }
+        const indexUD = Math.floor(d/2)-1
+        const indexLR = Math.sign(d % 2 - .5)
+
+        const top = 45 * indexUD
+        const gt = indexUD
+        const left  = (52 - (Math.abs(indexUD) * 26)) * indexLR
+        const gl = (1 - (Math.abs(indexUD) * .5)) * indexLR
+
         return {top, left, gt, gl}
     }
 
