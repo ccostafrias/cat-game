@@ -33,12 +33,12 @@ export default function App() {
     const [pass, setPass] = useState(0)
     const [isWin, setIsWin] = useState(false)
     
-    const hexToDecimal = (hex) => parseInt(hex, 16)
-    const decToHex = (dec) => Math.abs(dec).toString(16)
+    // const hexToDecimal = (hex) => parseInt(hex, 16)
+    // const decToHex = (dec) => Math.abs(dec).toString(16)
     const random = (n) => Math.floor(Math.random() * n)
 
     const red = getComputedStyle(document.documentElement)
-        .getPropertyValue('--primary-color')
+        .getPropertyValue('--red')
 
     const green = getComputedStyle(document.documentElement)
         .getPropertyValue('--secondary-color')
@@ -55,13 +55,14 @@ export default function App() {
             setTimeout(() => {
                 const cExtreme = Math.round(((x / (hexCount-1)) - .5)*1.1)
                 const rExtreme = Math.round(((y / (hexCount-1)) - .5)*1.1)
-                const distance = 150
+                const distance = 90
+                const time = 2
                 setPlayer(prevPlayer => {
                     return {
                         ...prevPlayer,
-                        top: prevPlayer.top + rExtreme * distance,
-                        left: prevPlayer.left + cExtreme * distance,
-                        transition: 'all 2s ease',
+                        top: prevPlayer.top + rExtreme * distance * time,
+                        left: prevPlayer.left + cExtreme * distance * time,
+                        transition: `all ${time}s ease`,
                     }
                 })
                 setIsWin(true)
@@ -72,11 +73,12 @@ export default function App() {
 
     const hexElements = hex.map((h) => {
         const {c, r, id, cellNum, active} = h
+        const {isWalking} = player
         const style =  {
             left: r % 2 ? 'calc(28px * var(--scale))' : null,
         }
-        const maxCellNum = Math.max(...hex.map(h => h.cellNum))
-        const percentage = (100*cellNum)/maxCellNum
+        // const maxCellNum = Math.max(...hex.map(h => h.cellNum))
+        // const percentage = (100*cellNum)/maxCellNum
         // const color = getBetweenColor([red, green], percentage/100)
         const color = active ? green : red
         const isCentral = Math.floor(hexCount/2) === c && Math.floor(hexCount/2) === r
@@ -91,11 +93,15 @@ export default function App() {
                 data-cell-num={cellNum}
                 style={style}                
                 onClick={() => {
+                    if (!active) return
+                    if (isWin) return
                     deactivateHex(h.id)
                     setPass(prevPass => prevPass + 1)
                 }}
                 onKeyUp={(e) => {
                     if (e.code !== 'Enter' && e.code !== 'Space') return
+                    if (!active) return
+                    if (isWin) return
                     deactivateHex(h.id)
                     setPass(prevPass => prevPass + 1)
                 }}
@@ -117,7 +123,13 @@ export default function App() {
                             transition: player.transition,
                         }}>
                             <div className="shadow"></div>
-                            <div className={`goat ${isWin ? 'walking' : ''}`}></div>
+                            <div 
+                                onAnimationEnd={(e) => setPlayer(prevPlayer => ({...prevPlayer, isWalking: false}))} 
+                                className={`goat ${isWin || isWalking ? 'walking' : ''}`}
+                                style={{
+                                    animationIterationCount: isWin ? 'infinite' : '1',
+                                }}
+                            />
                         </div>
                     )}
                 </div>
@@ -147,6 +159,7 @@ export default function App() {
                     gl: prevPlayer.gl + gl,
                     dir: minHex.dir,
                     cellNum: minHex.cellNum,
+                    isWalking: true,
                 }
             )
         })
@@ -178,18 +191,11 @@ export default function App() {
         setHex(prevHex => {
             return prevHex.map(h => {
                 return h.id === id ? (
-                    {...h, active: !h.active}
+                    {...h, active: false}
                 ) : h
             })
         })
     }
-
-    function getBetweenColor(colors, f) {
-        const [c1, c2] = colors.map(c => c.slice(1).match(/..?/g).map(rgb => hexToDecimal(rgb, 16)))
-        const inColor = c1.map((c, i) => decToHex(Math.floor(((c * 2 * f) + (c2[i] * (2 - 2 * f)))/2)))
-        return `#${inColor.join('')}`
-    }
-
 
     function convergeNum(numbers, range) {
         range = range - 1
