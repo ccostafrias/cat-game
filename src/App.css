@@ -193,10 +193,8 @@ body {
 
 .cry {
     animation-name: squash;
-    animation-duration: .2s;
+    animation-duration: 2s;
     animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-timing-function: ease;
 }
 
 .shadow {
@@ -236,12 +234,20 @@ body {
 @keyframes squash {
   
     0%, 100% {
-      transition-time-function: ease-in;
-      transform-origin: 50% 100%;
+        transform-origin: 50% 100%;
+        transform:  scaleX(1) scaleY(1) ;
+        animation-timing-function: ease-in;
+    }
+    60% {
+        transform:  scaleX(.8) scaleY(1.2) ;
+        animation-timing-function: ease-out;
     }
 
-    100% {
-      transform:  scaleX(1.1) scaleY(.8) ;
+    70% {
+        transform:  scaleX(1.2) scaleY(.8) ;
+    }
+    80% {
+        transform:  scaleX(1.4) scaleY(.7) ;
     }
 
   }

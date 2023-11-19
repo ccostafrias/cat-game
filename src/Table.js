@@ -4,18 +4,42 @@ export default function Table() {
     const hexCount = 11
 
     const [hex, setHex] = useState(
-        Array.from(Array(hexCount**2)).map((_, i) => {
-            const c =  i % hexCount
-            const r = Math.floor(i / hexCount)
-            return {
-                c,
-                r,
-                id: i,
-                cellNum: convergeNum([c, r], hexCount),
-                active: true,
-            }
-        })
+        placeHexagons()
     )
+
+    function placeHexagons() {
+        const numDes = 8
+
+        const hexArray = (
+            Array.from(Array(hexCount**2)).map((_, i) => {
+                const c =  i % hexCount
+                const r = Math.floor(i / hexCount)
+                return {
+                    c,
+                    r,
+                    id: i,
+                    cellNum: convergeNum([c, r], hexCount),
+                    active: true,
+                }
+            })
+        )
+
+        const desIndexes = Array(hexCount**2)
+            .fill()
+            .map((_, i) => i)
+            .filter((_, i) => ![(hexCount**2-1)/2].includes(i))
+            .sort(() => Math.random() - .5)
+            .slice(0, numDes)
+        
+        const desactivatedHex = (hex, n) => hex.map((h, i) => {
+
+                const isDes = desIndexes.includes(i)
+                if (isDes) return {...h, active: false}
+                return h
+        })
+        
+        return desactivatedHex(hexArray, numDes)
+    }
 
     const [player, setPlayer] = useState({
         x: Math.floor(hexCount/2),
