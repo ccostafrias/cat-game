@@ -24,10 +24,12 @@
     --fw-bold: 700;
 
     --scale: .9;
+    --padding: 3rem;
+    --hex-radius: 30px;
 
     --primary-color: #d5efd5;
     --secondary-color: #76b676;
-    --red: #c05555;
+    --hex-active: #c05555;
     --hex-color: #fff;
 }
 
@@ -91,14 +93,24 @@ body {
 }
 
 .main-game {
-    --padding: 3rem;
-    --mask: linear-gradient(#000 0 0) 50%/calc(100% - 20px) calc(100% - 20px) no-repeat, radial-gradient(farthest-side, #000 98%, #0000) 0 0/25px 25px round;
+    padding: var(--padding) calc(var(--padding) + 14px * var(--scale)) calc(var(--padding) + 13px * var(--scale));
     background-color: var(--primary-color);
     position: relative;
-    padding: var(--padding) calc(var(--padding) + 14px * var(--scale)) calc(var(--padding) + 13px * var(--scale));
-    -webkit-mask: var(--mask);
-    mask: var(--mask);
-    
+    overflow: hidden;
+}
+
+.main-game::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    border: solid var(--secondary-color) var(--padding);
+    border-image: url('./images/border.png') 109.6 round;
+    z-index: 9999;
 }
 
 .table {
@@ -106,8 +118,6 @@ body {
     left: calc(-14px * var(--scale));
     display: grid;
     gap: 4px;
-    
-    /* transform: rotate(90deg); */
 }
 
 .hex {
@@ -119,23 +129,12 @@ body {
     transition: all .2s ease;
 }
 
-.hex::after {
-    width: 52px;
-    height: 60px;
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    opacity: .75;
-    /* background-image: url('./images/grass.png'); */
-    pointer-events: none;
-}
-
 .hex-top {
-    width: 0; height: 0;
-    border-bottom: calc(15px * var(--scale)) solid var(--primary-color);
-    border-left: calc(26px * var(--scale)) solid transparent;
-    border-right: calc(26px * var(--scale)) solid transparent;
+    width: 0; 
+    height: 0;
+    border-bottom: calc(var(--hex-radius) / 2 * var(--scale)) solid var(--primary-color);
+    border-left: calc(var(--hex-radius) * 1.732 / 2 * var(--scale)) solid transparent;
+    border-right: calc(var(--hex-radius) * 1.732 / 2 * var(--scale)) solid transparent;
     position: relative;
 }
 
@@ -144,8 +143,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: calc(52px * var(--scale));
-    height: calc(30px * var(--scale));
+    width: calc(var(--hex-radius) * 1.732 * var(--scale));
+    height: calc(var(--hex-radius) * var(--scale));
     background-color: var(--primary-color);
     position: relative;
     color: white;
@@ -155,15 +154,14 @@ body {
 .hex-bottom {
     width: 0;
     position: absolute;
-    /* bottom: calc(-15px * var(--scale)); */
-    border-top: calc(15px * var(--scale)) solid var(--primary-color);
-    border-left: calc(26px * var(--scale)) solid transparent;
-    border-right: calc(26px * var(--scale)) solid transparent;
+    border-top: calc(var(--hex-radius) / 2 * var(--scale)) solid var(--primary-color);
+    border-left: calc(var(--hex-radius) * 1.732 / 2 * var(--scale)) solid transparent;
+    border-right: calc(var(--hex-radius) * 1.732 / 2 * var(--scale)) solid transparent;
 }
 
 .goat-wrapper {
     aspect-ratio: 1/1;
-    width: calc(60px * var(--scale));
+    width: calc(var(--hex-radius) * 2 * var(--scale));
     position: absolute;
     user-select: none;
     pointer-events: none;
@@ -176,8 +174,29 @@ body {
     background-repeat: no-repeat;
     aspect-ratio: 1/1;
     width: 100%;
-    position: absolute;
+    position: relative;
     /* cursor: pointer; */
+}
+
+.goat.cry::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: calc(18px * var(--scale));
+    right: calc(-18px * var(--scale));
+    width: calc(81px * var(--scale));
+    height: calc(50px * var(--scale));
+    background-image: url('./images/goat_cry.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.cry {
+    animation-name: squash;
+    animation-duration: .2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease;
 }
 
 .shadow {
@@ -213,6 +232,19 @@ body {
         animation-timing-function: ease-out;
     }
 }
+
+@keyframes squash {
+  
+    0%, 100% {
+      transition-time-function: ease-in;
+      transform-origin: 50% 100%;
+    }
+
+    100% {
+      transform:  scaleX(1.1) scaleY(.8) ;
+    }
+
+  }
 
 @media (max-width: 600px) {
     :root {
